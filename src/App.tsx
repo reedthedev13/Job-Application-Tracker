@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase";
+import Auth from "./components/AuthComponent";
+import Dashboard from "./components/Dashboard";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, loading] = useAuthState(auth);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen bg-gray-50">
+      <header className="p-4 bg-indigo-600 text-white flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Job Application Tracker</h1>
+        <Auth />
+      </header>
+
+      <main className="p-4">
+        {user ? <Dashboard /> : <p>Please log in to continue.</p>}
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
